@@ -1,0 +1,1 @@
+/Users/matthieuvierasantacruz/.local/share/omf/themes/boxfish/fish_prompt.fish
