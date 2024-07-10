@@ -50,6 +50,7 @@ return {
         "gosum",
         "zig",
         "c",
+        "astro",
       },
       incremental_selection = {
         enable = true,
