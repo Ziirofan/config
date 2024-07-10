@@ -1,5 +1,6 @@
 # Add Homebrew to the PATH.
 eval "$(/usr/local/bin/brew shellenv)"
+BREW_PREFIX="$(brew --prefix)"
 
 # Add brew's version of curl to the PATH
 export PATH="$(brew --prefix curl)/bin:$PATH"
@@ -75,9 +76,26 @@ setopt pushdminus
 setopt sharehistory
 
 # Tweak some history options.
-export HISTSIZE=10000
-export SAVEHIST=10000
-export HISTFILE=~/.zsh/.zsh_history
+# Save the history in your home directory as .zsh_history
+export HISTFILE=$HOME/.zsh_history 
+# Set the history size to 2000 commands
+export HISTSIZE=10000             
+# Store the same number to disk
+export SAVEHIST=$HISTSIZE          
+# Share history between sessions
+setopt share_history               
+# Remove duplicates first when HISTSIZE is met
+setopt hist_expire_dups_first      
+# If a command is issued multiple times in a row, ignore dupes
+setopt hist_ignore_dups  
+# Allow editing the command before executing again
+setopt hist_verify                 
+# Do not add commands prefixed with a space to the history
+setopt hist_ignore_space 
+
+# Enable history navigation using the up and down keys
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # Set up zsh up/down/home/end key search completions.
 autoload -U history-search-end
@@ -151,6 +169,10 @@ zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 autoload -Uz compinit
 compinit
+# Enable auto-complete of aliases
+setopt complete_aliases
+# Enable comments
+setopt interactive_comments
 
 # See: https://iterm2.com/documentation-shell-integration.html
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
@@ -171,3 +193,12 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 if [ -f "${PWD}/.nvmrc" ]; then
   eval "$(nvm use --silent)"
 fi
+
+# Enable command syntax highlighting
+source ${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Enable zsh auto-suggestions
+source ${BREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Enable zsh history substring search
+source ${BREW_PREFIX}/share/zsh-history-substring-search/zsh-history-substring-search.zsh
